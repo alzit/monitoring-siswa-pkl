@@ -5,6 +5,7 @@ import androidx.appcompat.widget.AppCompatButton;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -44,6 +45,7 @@ public class RegisterActivity extends AppCompatActivity {
             public void onClick(View view) {
                 user = username.getText().toString();
                 pass = password.getText().toString();
+
                 confirmpass = confirmpassword.getText().toString();
 
                 if(confirmpass.equals(pass)){
@@ -69,12 +71,15 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
 
-    private void moveToRegister(String user,String pass) { 
+    private void moveToRegister(String user,String pass) {
+        Log.d("TAG", "moveToRegister: "+user+""+pass);
+
         ApiInterface apiInterface= ApiServer.getClient().create(ApiInterface.class);
         Call<ResponseLogin> call = apiInterface.register(user, pass);
         call.enqueue(new Callback<ResponseLogin>() {
             @Override
             public void onResponse(Call<ResponseLogin> call, Response<ResponseLogin> response) {
+                Log.d("TAG", "onResponse: "+response.isSuccessful());
                 if(response.isSuccessful()){
                     Toast.makeText(getApplicationContext(), "berhasil mendaftar", Toast.LENGTH_SHORT).toString();
                 }else{
